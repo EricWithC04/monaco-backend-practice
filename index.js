@@ -12,8 +12,28 @@ app.use(express.json())
 app.post("/lint-python", (req, res) => {
     const code = req.body.code
 
+    // Configuración necesaria para flake8
+    const options = {
+        mode: 'text',
+        pythonOptions: ['-m'], // Utilizar el módulo flake8
+        scriptPath: '', // No se necesita especificar un directorio de scripts
+        args: ['-', '--format=%(row)d:%(col)d:%(code)s:%(text)s'], // Argumentos para flake8
+    };
+
     try {
-        PythonShell.run('flake8', null).then(() => console.log('Linting successful'))
+        
+        const pyShell = new PythonShell('flake8', options)
+
+        pyShell.send(code)
+
+        pyShell.on('message', (message) => {
+            console.log(message);
+        })
+
+        pyShell.end((err) => {
+            
+        })
+
     } catch (err) {
         console.error({ msg: 'Error al ejecutar el linter', error: err.message });
     }
