@@ -27,7 +27,9 @@ app.post("/execute", (req, res) => {
     }
 
     try {
-        PythonShell.runString(code, null).then(([result]) => console.log(result))
+        PythonShell.runString(code, null)
+            .then(([result]) => console.log(result))
+            .catch(err => console.log("Hubo un error en la ejecucion del codigo", err))
 
         return res.status(200).json({ "msg": "Codigo ejecutado correctamente" })
     } catch (err) {
