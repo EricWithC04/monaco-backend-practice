@@ -9,6 +9,16 @@ app.use(cors())
 app.use(helmet())
 app.use(express.json())
 
+app.post("/lint-python", (req, res) => {
+    const code = req.body.code
+
+    try {
+        PythonShell.run('flake8', null).then(() => console.log('Linting successful'))
+    } catch (err) {
+        console.error({ msg: 'Error al ejecutar el linter', error: err.message });
+    }
+})
+
 app.post("/execute", (req, res) => {
     const code = req.body.code
 
