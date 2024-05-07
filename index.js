@@ -28,11 +28,10 @@ app.post("/lint-python", (req, res) => {
 
         pyShell.on('message', (message) => {
             console.log(message);
+            res.status(200).json({ "msg": message })
         })
 
-        pyShell.end((err) => {
-            
-        })
+        pyShell.end((err) => {})
 
     } catch (err) {
         console.error({ msg: 'Error al ejecutar el linter', error: err.message });
