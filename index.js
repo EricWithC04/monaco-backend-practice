@@ -28,7 +28,18 @@ app.post("/lint-python", (req, res) => {
 
         pyShell.on('message', (message) => {
             console.log(message);
-            res.status(200).json({ "msg": message })
+
+            const parts = message.split(":")
+
+            const formatedError = {
+                row: parts[0],
+                col: parts[1],
+                code: parts[2],
+                typeError: parts[3],
+                description: parts[4]
+            }
+
+            res.status(200).json({ "error": formatedError })
         })
 
         pyShell.end((err) => {})
