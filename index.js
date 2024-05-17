@@ -69,6 +69,32 @@ app.post("/execute", (req, res) => {
     }
 })
 
+app.post("/execute/fastapi", (req, res) => {
+    const code = req.body.code
+
+    if (!code) {
+        throw new Error("No code provided")
+    }
+
+    try {
+        fetch('http://127.0.0.1:8000/execute', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                code: code
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                return res.status(200).json(data)
+            })
+    } catch (err) {
+        console.error(err)
+    }
+})
+
 app.listen(3000, () => {
     console.log("Server running on port 3000")
 })
