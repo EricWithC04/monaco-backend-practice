@@ -49,6 +49,32 @@ app.post("/lint-python", (req, res) => {
     }
 })
 
+app.post("/lint-fastapi", (req, res) => {
+    const code = req.body.code
+
+    if (!code) {
+        throw new Error("No code provided")
+    }
+
+    try {
+        fetch('http://127.0.0.1:8000/lint', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                code: code
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                return res.status(200).json(data)
+        })
+    } catch (err) {
+        console.error(err);
+    }
+})
+
 app.post("/execute", (req, res) => {
     const code = req.body.code
 
